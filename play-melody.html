@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Play Melody</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="playMelody()">Play Melody</button>
+
+  <script>
+    function playMelody() {
+      const synth = new Tone.PolySynth().toDestination();
+      const now = Tone.now();
+
+      const chords = {
+        C: ["C4", "E4", "G4"],
+        G: ["G3", "B3", "D4"],
+        Am: ["A3", "C4", "E4"],
+        F: ["F3", "A3", "C4"]
+      };
+
+      const progression = [
+        "C", "G", "Am", "F",  // Verse
+        "C", "G", "Am", "F",  // Verse
+        "F", "G", "Am", "G",  // Pre-Chorus
+        "F", "G", "Am", "G",  // Pre-Chorus
+        "C", "G", "Am", "F",  // Chorus
+        "C", "G", "Am", "F",  // Chorus
+        "F", "G", "Am", "G",  // Bridge
+        "F", "G", "Am", "G",  // Bridge
+        "C", "G", "Am", "F",  // Chorus
+        "C", "G", "Am", "F"   // Chorus
+      ];
+
+      let time = now;
+
+      progression.forEach(chord => {
+        synth.triggerAttackRelease(chords[chord], "2n", time);
+        time += Tone.Time("2n").toSeconds();
+      });
+
+      Tone.Transport.start();
+    }
+
+    // Start Tone.js audio context on user interaction
+    document.querySelector('button').addEventListener('click', () => {
+      Tone.start().then(playMelody);
+    });
+  </script>
+</body>
+</html>
